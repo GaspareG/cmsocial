@@ -1,4 +1,4 @@
-<div class="container">
+<div ng-show="isMe()" class="container">
   <ul class="nav nav-tabs">
     <li ng-class="{active: isActiveTab(1)}">
       <a ui-sref=".profile"><i class="fa fa-file-text fa-lg"></i> {{'Profile' | l10n}}</a>

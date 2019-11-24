@@ -495,7 +495,13 @@ angular.module('cmsocial')
     // Forum
     'Forums': {
       it: 'Forum'
-    }
+    },
+
+    // Cyber Challenge
+    'Online Pre-Test':  { it: 'Pre-Test Online'},
+    'Logic Quiz':       { it: 'Quiz Logico'},
+    'Programming Test': { it: 'Test di Programmazione'}
+
   })
   .factory('l10n', function(words) {
     if (localStorage.getItem("language") == undefined) {

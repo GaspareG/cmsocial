@@ -77,7 +77,17 @@ angular
         templateUrl: 'COMMIT_ID_HERE/views/task.stats.html',
         controller: 'StatsCtrl'
       })
-      .state('ranking', {
+      .state('pre-test', {
+        url: '/pre-test',
+        templateUrl: 'COMMIT_ID_HERE/views/pre-test.html',
+        controller: 'PreTestCtrl'
+      })
+      .state('logic-quiz', {
+        url: '/logic-quiz',
+        templateUrl: 'COMMIT_ID_HERE/views/logic-quiz.html',
+        controller: 'LogicQuizCtrl'
+      })
+      /*.state('ranking', {
         templateUrl: 'COMMIT_ID_HERE/views/ranking.html',
         controller: 'RankingSkel'
       })
@@ -85,7 +95,7 @@ angular
         url: '/ranking/{pageNum}',
         templateUrl: 'COMMIT_ID_HERE/views/ranking.page.html',
         controller: 'RankingCtrl'
-      })
+      })*/
       .state('user', {
         url: '/user/{userId}',
         templateUrl: 'COMMIT_ID_HERE/views/user.html',

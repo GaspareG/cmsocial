@@ -930,20 +930,13 @@ Recovery code: %s""" % (user.username, user.social_user.recover_code)):
                         "sref": "tests",
                         "display": display(local.contest.tests)
                     }]
+
                 menu = [{
                     "title": "Task & quiz archive",
                     "icon":  "fa-archive",
                     "entries": task_menu
-                }, {
-                    "title": "Ranking",
-                    "icon": "fa-trophy",
-                    "entries": [{
-                        "title": "Ranking",
-                        "icon": "fa-trophy",
-                        "sref": "ranking.page",
-                        "params": {"pageNum": 1}
-                    }]
                 }]
+
                 if local.contest.social_contest.forum is not None:
                     menu.append({
                         "title": "Forum",
@@ -953,6 +946,8 @@ Recovery code: %s""" % (user.username, user.social_user.recover_code)):
                             "icon": "fa-comments",
                             "href": local.contest.social_contest.forum
                         }]})
+
+                '''
                 menu.append({
                     "title": "Sign up",
                     "icon": "fa-pencil",
@@ -962,6 +957,8 @@ Recovery code: %s""" % (user.username, user.social_user.recover_code)):
                         "sref": "signup",
                         "display": "unlogged"
                     }]})
+                '''
+
             local.resp["menu"] = menu
         else:
             return 'Bad Request'

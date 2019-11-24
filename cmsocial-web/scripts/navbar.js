@@ -21,10 +21,10 @@ var _l10n;
 var langlist = [{
   'code': 'en',
   'name': 'English'
-}, {
+}/*, {
   'code': 'it',
   'name': 'Italiano'
-}];
+}*/];
 
 angular.module('cmsocial')
   .directive('navbar', function() {
@@ -52,11 +52,12 @@ angular.module('cmsocial')
 
     _l10n = l10n;
 
+    /*
     ReactDOM.render(
       <LanguageSelector/>,
       document.getElementById("langsel")
     );
-
+    */
     // ugly hack because of react limitation
     let x = document.getElementsByTagName("something");
     for (let y of Array.from(x)) {
