@@ -21,12 +21,5 @@
         <td>{{nsubs}}</td>
       </tr>
     </table>
-    <h3>{{'Users with the best solutions' | l10n}}</h3>
-    <div class="list-group">
-      <a ng-repeat="good in best" class="list-group-item" ui-sref="user({ userId: good.username })">
-        <i class="fa fa-angle-right"></i> {{good.username}}
-        <tt class="pull-right">{{good.time}}</tt>
-      </a>
-    </div>
   </div>
 </div>

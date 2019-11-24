@@ -153,6 +153,12 @@ angular.module('cmsocial')
     };
     $scope.getStats();
   })
+  .controller('PreTestCtrl', function($scope, $stateParams, $http){
+    // TODO
+  })
+  .controller('LogicQuizCtrl', function($scope, $stateParams, $http){
+    // TODO
+  })
   .controller('SubmissionsCtrl', function($scope, $stateParams, $location,
     $http, $timeout, $rootScope, notificationHub,
     subsDatabase, taskbarManager, l10n, contestManager, API_PREFIX) {

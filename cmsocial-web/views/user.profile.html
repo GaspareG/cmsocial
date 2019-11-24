@@ -1,21 +1,12 @@
-<div class="topleft-fix panel panel-default">
+<div ng-show="isLogged()" ng-if="isMe()" class="topleft-fix panel panel-default">
   <div class="topleft-fix panel-heading">
     <h3 class="panel-title">{{'Profile' | l10n}}</h3>
   </div>
   <div class="panel-body row">
     <div class="col-xs-6">
       <h3 class="userbadge {{user.access_level | levelClass}}">
-        {{user.username}}
-        <small class="label label-default">{{user.access_level | levelClass}}</small>
+        {{user.first_name}} {{user.last_name}}
       </h3>
-      <br />
-      <span ng-if="user.institute.name">
-        <i class="fa fa-home fa-lg"></i> {{user.institute.name}} ({{user.institute.province}})
-      </span>
-      <br />
-      <span>
-        <i class="fa fa-star fa-lg"></i> {{user.score}} pt
-      </span>
       <br />
     </div>
     <div class="col-xs-6">

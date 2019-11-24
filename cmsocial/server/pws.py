@@ -901,41 +901,75 @@ Recovery code: %s""" % (user.username, user.social_user.recover_code)):
             else:
                 def display(var):
                     return 'always' if len(var) > 0 else 'admin'
-                task_menu = [{
-                        "title": "All tasks",
-                        "icon": "fa-list-ol",
-                        "sref": "tasklist.page",
-                        "params": {"pageNum": 1, "tag": None, "q": None}
-                    }, {
-                        "title": "Tasks by technique",
-                        "icon": "fa-rocket",
-                        "sref": "techniques"
-                    }, {
-                        "title": "Tasks by event",
-                        "icon": "fa-trophy",
-                        "sref": "events"
-                    }, {
-                        "title": "Lessons",
-                        "icon": "fa-pencil",
-                        "sref": "lessons",
-                        "display": display(local.contest.lessons)
-                    }, {
-                        "title": "Material",
-                        "icon": "fa-pencil",
-                        "sref": "material",
-                        "display": display(local.contest.materials)
-                    }, {
-                        "title": "Quizzes",
-                        "icon": "fa-pencil",
-                        "sref": "tests",
-                        "display": display(local.contest.tests)
-                    }]
 
-                menu = [{
-                    "title": "Task & quiz archive",
-                    "icon":  "fa-archive",
-                    "entries": task_menu
-                }]
+#                
+#                task_menu = [{
+#                        "title": "All tasks",
+#                        "icon": "fa-list-ol",
+#                        "sref": "tasklist.page",
+#                        "params": {"pageNum": 1, "tag": None, "q": None}
+#                    }, {
+#                        "title": "Tasks by technique",
+#                        "icon": "fa-rocket",
+#                        "sref": "techniques"
+#                    }, {
+#                        "title": "Tasks by event",
+#                        "icon": "fa-trophy",
+#                        "sref": "events"
+#                    }, {
+#                        "title": "Lessons",
+#                        "icon": "fa-pencil",
+#                        "sref": "lessons",
+#                        "display": display(local.contest.lessons)
+#                    }, {
+#                        "title": "Material",
+#                        "icon": "fa-pencil",
+#                        "sref": "material",
+#                        "display": display(local.contest.materials)
+#                    }, {
+#                        "title": "Quizzes",
+#                        "icon": "fa-pencil",
+#                        "sref": "tests",
+#                        "display": display(local.contest.tests)
+#                    }]
+#
+#                menu = [{
+#                    "title": "Task & quiz archive",
+#                    "icon":  "fa-archive",
+#                    "entries": task_menu
+#                }]
+#
+
+                menu = [
+                {
+                        "title": "Pre-Test",
+                        "icon": "fa-bar-chart",
+                        "entries": [{
+                          "title": "Pre-Test",
+                          "icon": "fa-bar-chart",
+                          "sref": "pre-test",
+                       }]
+                },
+                {
+                        "title": "Logic quiz",
+                        "icon": "fa-calculator",
+                        "entries": [{
+                          "title": "Logic quiz",
+                          "icon": "fa-calculator",
+                          "sref": "logic-quiz",
+                       }]
+                },
+                {
+                        "title": "Programming test",
+                        "icon": "fa-code",
+                        "entries": [{
+                          "title": "Programming test",
+                          "icon": "fa-code",
+                          "sref": "tasklist.page",
+                          "params": {"pageNum": 1, "tag": None, "q": None}
+                       }]
+                }
+                ]
 
                 if local.contest.social_contest.forum is not None:
                     menu.append({
