@@ -277,6 +277,36 @@ class APIHandler(object):
         except UnicodeDecodeError:
             return None
 
+    # TODO: check
+    def get_participation_id(self, contest, id, password=None):
+        try:
+            participation = local.session.query(Participation)\
+                .join(User)\
+                .filter(Participation.contest_id == contest.id)\
+                .filter(User.id == id).first()
+            if participation is None:
+                return None
+            if password is None or \
+               self.validate_user(participation.user, password):
+                return participation
+        except UnicodeDecodeError:
+            return None
+
+    # TODO: check
+    def get_participation_email(self, contest, email, password=None):
+        try:
+            participation = local.session.query(Participation)\
+                .join(User)\
+                .filter(Participation.contest_id == contest.id)\
+                .filter(User.email == email).first()
+            if participation is None:
+                return None
+            if password is None or \
+               self.validate_user(participation.user, password):
+                return participation
+        except UnicodeDecodeError:
+            return None
+
     def get_user(self, username, password=None):
         try:
             user = local.session.query(User)\
@@ -697,8 +727,11 @@ class APIHandler(object):
                 logger.warning('Missing parameter')
                 return 'Bad request'
 
-            participation = self.get_participation(
+            participation = self.get_participation_email(
                 local.contest, username, password)
+# TODO: check
+#            participation = self.get_participation(
+#                local.contest, username, password)
             if participation is None:
                 local.user = self.get_user(username, password)
                 if local.user is None:
@@ -724,8 +757,13 @@ class APIHandler(object):
                 local.resp['user'] = self.get_participation_info(
                     local.participation)
         elif local.data['action'] == 'get':
-            participation = self.get_participation(
-                local.contest, local.data['username'])
+            participation = None
+            if 'username' in local.data:
+                participation = self.get_participation(
+                  local.contest, local.data['username'])
+            elif 'id' in local.data:
+                participation = self.get_participation_id(
+                  local.contest, local.data['id'])
             if participation is None:
                 return 'Not found'
             local.resp = self.get_participation_info(participation)
@@ -942,10 +980,19 @@ Recovery code: %s""" % (user.username, user.social_user.recover_code)):
 
                 menu = [
                 {
-                        "title": "Pre-Test",
+                        "title": "Home",
+                        "icon": "fa-home",
+                        "entries": [{
+                          "title": "Home",
+                          "icon": "fa-home",
+                          "sref": "overview",
+                       }]
+                },
+                {
+                        "title": "Pre-test",
                         "icon": "fa-bar-chart",
                         "entries": [{
-                          "title": "Pre-Test",
+                          "title": "Pre-test",
                           "icon": "fa-bar-chart",
                           "sref": "pre-test",
                        }]

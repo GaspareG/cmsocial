@@ -1,12 +1,12 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container">
+  <div class="">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="/"><img src="https://cyberchallenge.it/assets/loghi/logo.png" style="height: 52px;overflow: hidden;background: #FFF;padding: 2px;"></a>
+      <a href="https://cyberchallenge.it/"><img src="https://cyberchallenge.it/assets/loghi/logo.png"></a>
     </div>
 
     <div class="navbar-collapse collapse" ng-controller="SignCtrl">
@@ -38,7 +38,7 @@
             <form class="signin-form" role="form" name="signinform" ng-submit="signin()">
               <div class="form-group">
                 <label class="sr-only" for="username">{{'Username' | l10n}}</label>
-                <input class="form-control" maxlength="15" type="text" id="username" name="username" ng-model="user.username" placeholder="Username" />
+                <input class="form-control" type="text" id="username" name="username" ng-model="user.username" placeholder="Username" />
               </div>
               <div class="form-group">
                 <label class="sr-only" for="password">{{'Password' | l10n}}</label>
@@ -68,7 +68,7 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a ui-sref="user.profile({userId: me.getUser().username})">
+              <a ui-sref="user.profile({userId: me.getUser().id})">
                 <i class="fa fa-list-ol fa-fw"></i>
                 {{'My user profile' | l10n}}
               </a>
@@ -82,16 +82,6 @@
             </li>
           </ul>
         </li>
-
-        <!--
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-language fa-lg"></i>
-            <b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu" id="langsel"></ul>
-        </li>
-        //-->
 
         <li ng-if="me.getUser().access_level == 0">
           <a ui-sref="admin">

@@ -22,7 +22,8 @@ angular.module('cmsocial')
       return userManager.getUser().username;
     };
     $scope.isMe = function() {
-      return $stateParams.userId === userManager.getUser().username;
+      //return $stateParams.userId === userManager.getUser().username;
+      return $stateParams.userId === userManager.getUser().id;
     };
   })
   .factory('userManager', function($http, $timeout, $sce, $cookies, notificationHub, contestManager, l10n, API_PREFIX) {
@@ -188,7 +189,8 @@ angular.module('cmsocial')
     });
     $http.post(API_PREFIX + 'user', {
         'action': 'get',
-        'username': $stateParams.userId
+        'id': $stateParams.userId
+        //'username': $stateParams.userId
       })
       .success(function(data, status, headers, config) {
         if (data.success === 1) {
@@ -204,7 +206,7 @@ angular.module('cmsocial')
   })
   .controller('EdituserCtrl', function($scope, $state, $stateParams,
     $http, userbarManager, userManager, notificationHub, l10n, API_PREFIX) {
-    if (userManager.getUser().username !== $stateParams.userId) {
+    if (userManager.getUser().id !== $stateParams.userId) {
       $state.go('overview');
     }
     userbarManager.setActiveTab(3);
