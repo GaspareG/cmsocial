@@ -23,7 +23,7 @@ angular.module('cmsocial')
     };
     $scope.isMe = function() {
       //return $stateParams.userId === userManager.getUser().username;
-      return $stateParams.userId === userManager.getUser().id;
+      return parseInt($stateParams.userId) === userManager.getUser().id;
     };
   })
   .factory('userManager', function($http, $timeout, $sce, $cookies, notificationHub, contestManager, l10n, API_PREFIX) {

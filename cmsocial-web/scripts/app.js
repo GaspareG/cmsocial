@@ -146,11 +146,6 @@ angular
         templateUrl: 'COMMIT_ID_HERE/views/testpage.html',
         controller: 'TestpageCtrl'
       })
-      .state('admin', {
-        url: '/admin',
-        templateUrl: 'COMMIT_ID_HERE/views/admin.html',
-        controller: 'AdminCtrl'
-      })
       .state('techniques', {
         url: '/tags/techniques',
         controller: 'TechniquesPage',

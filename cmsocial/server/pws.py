@@ -427,6 +427,7 @@ class APIHandler(object):
 
     def get_user_info(self, user):
         info = dict()
+        info['id'] = user.id
         info['username'] = user.username
         info['global_access_level'] = user.social_user.access_level
         info['access_level'] = info['global_access_level']
@@ -757,6 +758,12 @@ class APIHandler(object):
                 local.resp['user'] = self.get_participation_info(
                     local.participation)
         elif local.data['action'] == 'get':
+            if local.user is None:
+                return 'Unauthorized'
+            user_info = self.get_user_info(local.user)
+            if user_info is None:
+                return 'Unauthorized'
+            my_id = user_info['id']
             participation = None
             if 'username' in local.data:
                 participation = self.get_participation(
@@ -765,8 +772,10 @@ class APIHandler(object):
                 participation = self.get_participation_id(
                   local.contest, local.data['id'])
             if participation is None:
-                return 'Not found'
+                return 'Unauthorized'
             local.resp = self.get_participation_info(participation)
+            if local.resp['id'] != my_id:
+                return 'Unauthorized'
             # Append scores of tried tasks
             local.resp['scores'] = []
             for ts in participation.taskscores:
@@ -989,28 +998,28 @@ Recovery code: %s""" % (user.username, user.social_user.recover_code)):
                        }]
                 },
                 {
-                        "title": "Pre-test",
+                        "title": "Pre-tests",
                         "icon": "fa-bar-chart",
                         "entries": [{
-                          "title": "Pre-test",
+                          "title": "Pre-tests",
                           "icon": "fa-bar-chart",
                           "sref": "pre-test",
                        }]
                 },
                 {
-                        "title": "Logic quiz",
+                        "title": "Logic quizzes",
                         "icon": "fa-calculator",
                         "entries": [{
-                          "title": "Logic quiz",
+                          "title": "Logic quizzes",
                           "icon": "fa-calculator",
                           "sref": "logic-quiz",
                        }]
                 },
                 {
-                        "title": "Programming test",
+                        "title": "Programming tests",
                         "icon": "fa-code",
                         "entries": [{
-                          "title": "Programming test",
+                          "title": "Programming tests",
                           "icon": "fa-code",
                           "sref": "tasklist.page",
                           "params": {"pageNum": 1, "tag": None, "q": None}
