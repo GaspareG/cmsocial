@@ -135,11 +135,11 @@ angular.module('cmsocial')
     $scope.isLogged = userManager.isLogged;
     $scope.signin = function() {
       // temporary fix to get username & password
-      $scope.user.username = $("#username").val();
+      $scope.user.username = $("#email").val();
       $scope.user.password = $("#password").val();
       $http.post(API_PREFIX + 'user', {
           'action': 'login',
-          'username': $scope.user.username,
+          'email': $scope.user.email,
           'password': $scope.user.password,
           'keep_signed': $("#keep_signed").prop("checked")
         })

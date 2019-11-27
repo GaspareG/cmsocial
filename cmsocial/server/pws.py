@@ -318,6 +318,17 @@ class APIHandler(object):
         except UnicodeDecodeError:
             return None
 
+    def get_user_email(self, email, password=None):
+        try:
+            user = local.session.query(User)\
+                .filter(User.email == email).first()
+            if user is None:
+                return None
+            if password is None or self.validate_user(user, password):
+                return user
+        except UnicodeDecodeError:
+            return None
+
     def build_token(self):
         mh = self.hash(local.user.email, 'md5')
         data = {
@@ -722,19 +733,17 @@ class APIHandler(object):
             except IntegrityError:
                 return "Participation already exists"
         elif local.data['action'] == 'login':
-            username = local.data.get('username', None)
+            email = local.data.get('email', None)
             password = local.data.get('password', None)
-            if username is None or password is None:
+            if email is None or password is None:
                 logger.warning('Missing parameter')
                 return 'Bad request'
 
-            participation = self.get_participation_email(
-                local.contest, username, password)
-# TODO: check
-#            participation = self.get_participation(
-#                local.contest, username, password)
+
+            participation = self.get_participation_email(local.contest, email, password)
+
             if participation is None:
-                local.user = self.get_user(username, password)
+                local.user = self.get_user_email(email, password)
                 if local.user is None:
                     return 'login.error'
             else:
