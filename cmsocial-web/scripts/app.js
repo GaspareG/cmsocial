@@ -29,8 +29,6 @@ angular
       .when('/tasks/', '/tasks/1')
       .when('/task/{taskName}', '/task/{taskName}/statement')
       .when('/user/{userId}', '/user/{userId}/profile')
-      .when('/ranking/', '/ranking/1')
-      .when('/tecniques', '/techniques')
       .otherwise('/overview');
 
     $stateProvider
@@ -87,165 +85,15 @@ angular
         templateUrl: 'COMMIT_ID_HERE/views/logic-quiz.html',
         controller: 'LogicQuizCtrl'
       })
-      /*.state('ranking', {
-        templateUrl: 'COMMIT_ID_HERE/views/ranking.html',
-        controller: 'RankingSkel'
-      })
-      .state('ranking.page', {
-        url: '/ranking/{pageNum}',
-        templateUrl: 'COMMIT_ID_HERE/views/ranking.page.html',
-        controller: 'RankingCtrl'
-      })*/
       .state('user', {
         url: '/user/{userId}',
         templateUrl: 'COMMIT_ID_HERE/views/user.html',
         controller: 'UserbarCtrl'
       })
-      .state('user.edit', {
-        url: '/edit',
-        templateUrl: 'COMMIT_ID_HERE/views/user.edit.html',
-        controller: 'EdituserCtrl'
-      })
       .state('user.profile', {
         url: '/profile',
         templateUrl: 'COMMIT_ID_HERE/views/user.profile.html',
         controller: 'UserpageCtrl'
-      })
-      .state('signup', {
-        url: '/signup',
-        templateUrl: 'COMMIT_ID_HERE/views/signup.html',
-        controller: 'SignupCtrl'
-      })
-      .state('forgot-account', {
-        url: '/forgot-account',
-        templateUrl: 'COMMIT_ID_HERE/views/forgot-account.html',
-        controller: 'ForgotAccountCtrl'
-      })
-      .state('help', {
-        url: '/help/{taskName}',
-        templateUrl: 'COMMIT_ID_HERE/views/help.html',
-        controller: 'HelpCtrl'
-      })
-      .state('tests', {
-        url: '/tests',
-        templateUrl: 'COMMIT_ID_HERE/views/tests.html',
-        controller: 'TestsCtrl'
-      })
-      .state('material', {
-        url: '/material',
-        templateUrl: 'COMMIT_ID_HERE/views/material.html',
-        controller: 'MaterialCtrl'
-      })
-      .state('lessons', {
-        url: '/lessons',
-        templateUrl: 'COMMIT_ID_HERE/views/lessons.html',
-        controller: 'LessonsCtrl'
-      })
-      .state('test', {
-        url: '/test/{testName}',
-        templateUrl: 'COMMIT_ID_HERE/views/testpage.html',
-        controller: 'TestpageCtrl'
-      })
-      .state('techniques', {
-        url: '/tags/techniques',
-        controller: 'TechniquesPage',
-        template: `<div class="container">
-  <legend>Tasks by technique</legend>
-  <div class="tag-group">
-    <span class="tag-group-item" ng-repeat="tag in tags" style="padding: 5px;">
-      <a ui-sref="tasklist.page({tag: tag, pageNum: 1})" class="label btn-info">
-        <i class="fa fa-tag"></i>
-        {{tag}}
-      </a>
-    </span>
-  </div>
-</div>`
-      })
-      .state('events', {
-        url: '/tags/events',
-        controller: 'EventsPage',
-        template: `<div class="container">
-  <div class="col-sm-5">
-    <legend>IOI</legend>
-    <div class="well">
-      <div ng-repeat="year in ioi" style="margin-bottom: 10px">
-        <em>Anno IOI: {{year}}</em>
-        <div class="tag-group">
-          <span class="tag-group-item" style="padding: 5px;" ng-if="year != 2010">
-            <a ui-sref="tasklist.page({tag: 'ioi' + year + ',territoriali', pageNum: 1})" class="label btn-info">
-              <i class="fa fa-tag"></i> selezioni territoriali
-            </a>
-          </span>
-          <span class="tag-group-item" style="padding: 5px;" ng-if="year == 2010">
-            <a class="label btn-warning" title="non svolte">
-              <i class="fa fa-tag"></i> selezioni territoriali
-            </a>
-          </span>
-          <span class="tag-group-item" style="padding: 5px;" ng-if="year != 2009">
-            <a ui-sref="tasklist.page({tag: 'ioi' + year + ',nazionali', pageNum: 1})" class="label btn-info">
-              <i class="fa fa-tag"></i> selezioni nazionali
-            </a>
-          </span>
-          <span class="tag-group-item" style="padding: 5px;" ng-if="year == 2009">
-            <a class="label btn-warning" title="non svolte">
-              <i class="fa fa-tag"></i> selezioni nazionali
-            </a>
-          </span>
-          <span class="tag-group-item" style="padding: 5px;">
-            <a ui-sref="tasklist.page({tag: 'ioi' + year + ',ioi', pageNum: 1})" class="label btn-info">
-              <i class="fa fa-tag"></i> ioi
-            </a>
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-5">
-    <legend>Altre gare</legend>
-    <div class="well">
-      <div style="margin-bottom: 10px">
-        <em>OIS: Olimpiadi di Informatica a Squadre</em>
-        <div class="tag-group">
-          <span class="tag-group-item" style="padding: 5px;">
-            <a ui-sref="tasklist.page({tag: 'ois', pageNum: 1})" class="label btn-info">
-              <i class="fa fa-tag"></i> ois
-            </a>
-          </span>
-        </div>
-      </div>
-      <div style="margin-bottom: 10px">
-        <em>GATOR: Gara di Allenamento Tor Vergata</em>
-        <div class="tag-group">
-          <span class="tag-group-item" style="padding: 5px;">
-            <a ui-sref="tasklist.page({tag: 'gator', pageNum: 1})" class="label btn-info">
-              <i class="fa fa-tag"></i> gator
-            </a>
-          </span>
-        </div>
-      </div>
-      <div style="margin-bottom: 10px">
-        <em>ABC: Algoritmi Bergamo Contest</em>
-        <div class="tag-group">
-          <span class="tag-group-item" style="padding: 5px;">
-            <a ui-sref="tasklist.page({tag: 'abc', pageNum: 1})" class="label btn-info">
-              <i class="fa fa-tag"></i> abc
-            </a>
-          </span>
-        </div>
-      </div>
-      <div style="margin-bottom: 10px">
-        <em>Gare di allenamento Istituto Roiti Ferrara</em>
-        <div class="tag-group">
-          <span class="tag-group-item" style="padding: 5px;">
-            <a ui-sref="tasklist.page({tag: 'roiti', pageNum: 1})" class="label btn-info">
-              <i class="fa fa-tag"></i> roiti
-            </a>
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>`
       })
 
   })

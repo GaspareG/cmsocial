@@ -254,7 +254,7 @@ angular.module('cmsocial')
         case 0:
           return 'admin';
         case 1:
-          return 'monica';
+          return 'mod';
         case 2:
           return 'tutor';
         case 3:
