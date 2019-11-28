@@ -651,3 +651,38 @@ foot .container > * {
   padding-bottom: 21px;
   margin-right: 15px;
 }
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.open>a {
+  background: transparent;
+  box-shadow: unset;
+}
+
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover {
+    background-color: #005140!important;
+}
+
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+    background-color: #005140;
+}
+
+@media only screen and (max-width : 768px) {
+  .navbar-header {
+    margin: 0px;
+    padding: 1px;
+  }
+
+  .navbar-header img {
+    overflow: hidden;
+    background: #FFF;
+    padding-top: 11px;
+    padding-left: 11.5px;
+    padding-right: 11.5px;
+    padding-bottom: 11px;
+    margin: -14px;
+    height: 80px;
+  }
+
+  .navbar-collapse {
+    margin-top: 14px;
+  }
+}

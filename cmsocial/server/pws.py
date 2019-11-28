@@ -277,7 +277,6 @@ class APIHandler(object):
         except UnicodeDecodeError:
             return None
 
-    # TODO: check
     def get_participation_id(self, contest, id, password=None):
         try:
             participation = local.session.query(Participation)\
@@ -292,7 +291,6 @@ class APIHandler(object):
         except UnicodeDecodeError:
             return None
 
-    # TODO: check
     def get_participation_email(self, contest, email, password=None):
         try:
             participation = local.session.query(Participation)\
@@ -344,22 +342,10 @@ class APIHandler(object):
     def check_user(self, username):
         if len(username) < 4:
             return 'Username is too short'
-        elif not self.USERNAME_REG.match(username):
-            return 'Username is invalid'
-        else:
-            user = local.session.query(User)\
-                .filter(User.username.ilike(username)).first()
-            if user is not None:
-                return 'This username is not available'
 
     def check_email(self, email):
         if not self.EMAIL_REG.match(email):
             return 'Invalid e-mail'
-        else:
-            user = local.session.query(User)\
-                .filter(User.email == email).first()
-            if user is not None:
-                return 'E-mail already used'
 
     def hash(self, string, algo='sha256'):
         if string is None:
@@ -537,6 +523,10 @@ class APIHandler(object):
                         .replace(microsecond=0)
             response.response = wrap_file(environ, io.open(path, 'rb'))
             response.direct_passthrough = True
+        except IOError:
+            response = Response()
+            response.status_code = 404
+            response.data = "404 Not Found"
         except OSError:
             response = Response()
             response.status_code = 404
@@ -571,33 +561,6 @@ class APIHandler(object):
             return 'Bad request'
         return err
 
-    def location_handler(self):
-        if local.data['action'] == 'get':
-            institute = local.session.query(Institute)\
-                .filter(Institute.id == local.data['id']).first()
-            if institute is None:
-                return 'Not found'
-            local.resp = self.get_institute_info(institute)
-        elif local.data['action'] == 'listregions':
-            out = local.session.query(Region).all()
-            local.resp['regions'] = [{'id': r.id, 'name': r.name}
-                                     for r in out]
-        elif local.data['action'] == 'listprovinces':
-            out = local.session.query(Province)\
-                .filter(Province.region_id == local.data['id']).all()
-            local.resp['provinces'] = [{'id': r.id, 'name': r.name}
-                                       for r in out]
-        elif local.data['action'] == 'listcities':
-            out = local.session.query(City)\
-                .filter(City.province_id == local.data['id']).all()
-            local.resp['cities'] = [{'id': r.id, 'name': r.name}
-                                    for r in out]
-        elif local.data['action'] == 'listinstitutes':
-            out = local.session.query(Institute)\
-                .filter(Institute.city_id == local.data['id']).all()
-            local.resp['institutes'] = [{'id': r.id, 'name': r.name}
-                                        for r in out]
-
     def sso_handler(self):
         if local.user is None:
             return 'Unauthorized'
@@ -631,114 +594,19 @@ class APIHandler(object):
         })
 
     def user_handler(self):
-        if local.data['action'] == 'new':
-            try:
-                username = local.data['username']
-                password = local.data['password']
-                email = local.data['email'].lower()
-                firstname = local.data['firstname']
-                lastname = local.data['lastname']
-                recaptcha_response = local.data['recaptcha_response'] if \
-                    'recaptcha_response' in local.data else None
-            except KeyError:
-                logger.warning('Missing parameters')
+        if 'action' not in local.data:
                 return 'Bad request'
 
-            # Check captcha if we changed the secret key
-            if local.contest.social_contest.is_captcha_enabled():
-                r = requests.post(
-                    "https://www.google.com/recaptcha/api/siteverify",
-                    data={'secret': local.contest.social_contest.recaptcha_secret_key,
-                          'response': recaptcha_response},  # , 'remoteip': ''},
-                    verify=False)
-                try:
-                    assert r.json()["success"] is True
-                except:
-                    return "Anti-spam check failed"
-
-            token = self.hashpw(password)
-
-            err = self.check_user(username)
-            if err is not None:
-                return err
-            err = self.check_email(email)
-            if err is not None:
-                return err
-
-            if local.contest is not None and \
-               local.contest.social_contest.access_level < local.global_access_level:
-                return 'Unauthorized'
-
-            user = User(
-                first_name=firstname,
-                last_name=lastname,
-                username=username,
-                password=token,
-                email=email
-            )
-            social_user = SocialUser(
-                access_level=6,
-                registration_time=make_datetime()
-            )
-            social_user.user = user
-
-            if 'institute' in local.data:
-                social_user.institute_id = int(local.data['institute'])
-
-            try:
-                local.session.add(user)
-                local.session.add(social_user)
-                local.session.commit()
-            except IntegrityError:
-                return 'User already exists'
-
-            if local.contest is not None:
-                participation = Participation(
-                    user=user,
-                    contest=local.contest
-                )
-                social_participation = SocialParticipation()
-                social_participation.participation = participation
-
-                try:
-                    local.session.add(participation)
-                    local.session.add(social_participation)
-                    local.session.commit()
-                except IntegrityError:
-                    return "Participation already exists"
-            local.user = user
-            local.response = Response()
-            local.response.set_cookie(
-                'token', value=self.build_token(),
-                domain=local.contest.social_contest.cookie_domain)
-        elif local.data['action'] == 'newparticipation':
-            if local.user is None:
-                return 'Unauthorized'
-            if local.contest is None:
-                return 'Bad request'
-            if local.contest.social_contest.access_level < local.global_access_level:
-                return 'Unauthorized'
-
-            participation = Participation(
-                user=local.user,
-                contest=local.contest
-            )
-            social_participation = SocialParticipation()
-            social_participation.participation = participation
-
-            try:
-                local.session.add(participation)
-                local.session.add(social_participation)
-                local.session.commit()
-            except IntegrityError:
-                return "Participation already exists"
+        ##########################################
+        # /api/user     {'action': 'login'}
+        ##########################################
+        # elif local.data['action'] == 'login':
         elif local.data['action'] == 'login':
             email = local.data.get('email', None)
             password = local.data.get('password', None)
             if email is None or password is None:
                 logger.warning('Missing parameter')
                 return 'Bad request'
-
 
             participation = self.get_participation_email(local.contest, email, password)
 
@@ -758,6 +626,10 @@ class APIHandler(object):
                 'token', value=self.build_token(),
                 max_age = cookie_duration,
                 domain=local.contest.social_contest.cookie_domain)
+
+        ##########################################
+        # /api/user     {'action': 'me'}
+        ##########################################
         elif local.data['action'] == 'me':
             if local.user is None:
                 return 'Unauthorized'
@@ -766,6 +638,10 @@ class APIHandler(object):
             else:
                 local.resp['user'] = self.get_participation_info(
                     local.participation)
+
+        ##########################################
+        # /api/user     {'action': 'get'}
+        ##########################################
         elif local.data['action'] == 'get':
             if local.user is None:
                 return 'Unauthorized'
@@ -793,91 +669,6 @@ class APIHandler(object):
                 taskinfo['score'] = ts.score
                 taskinfo['title'] = ts.task.title
                 local.resp['scores'].append(taskinfo)
-        elif local.data['action'] == 'list':
-            if local.contest is None:
-                return "Bad request"
-            query = local.session.query(Participation)\
-                .join(User)\
-                .join(SocialParticipation)\
-                .filter(Participation.contest_id == local.contest.id)\
-                .order_by(desc(SocialParticipation.score))\
-                .order_by(desc(User.id))
-            if 'institute' in local.data:
-                query = query\
-                    .filter(SocialUser.institute_id == local.data['institute'])
-            participations, local.resp['num'] = self.sliced_query(query)
-            local.resp['users'] = map(
-                self.get_participation_info, participations)
-        elif local.data['action'] == 'update':
-            if local.user is None:
-                return 'Unauthorized'
-            if 'institute' in local.data and \
-                    local.data['institute'] is not None:
-                local.user.institute_id = int(local.data['institute'])
-            if 'email' in local.data and \
-                    local.data['email'] != '' and \
-                    local.user.email != local.data['email']:
-                err = self.check_email(local.data['email'])
-                if err is not None:
-                    return err
-                local.user.email = local.data['email']
-            if 'old_password' in local.data and \
-                    local.data['old_password'] != '':
-                if not self.validate_user(local.user, local.data['old_password']):
-                    return 'Wrong password'
-                if len(local.data['password']) < 5:
-                    return 'Password\'s too short'
-                new_token = self.hashpw(local.data['password'])
-                local.user.password = new_token
-                local.resp['token'] = new_token
-            local.session.commit()
-        elif local.data['action'] == 'recover':
-            user = local.session.query(User)\
-                .filter(User.email == local.data['email'])\
-                .first()
-
-            if user is None:
-                return 'No such user'
-
-            if len(local.data['code']) > 0:
-                local.resp['type'] = 1
-
-                if local.data['code'] == user.social_user.recover_code:
-                    user.social_user.recover_code = None
-
-                    # Generate new password an mail it
-                    tmp_password = self.gencode()
-                    user.password = self.hashpw(tmp_password)
-                    local.session.commit()
-
-                    if self.send_mail(user.email, "Password reset",
-                                      "New password: %s" % tmp_password):
-                        del tmp_password
-
-                        local.resp['message'] = \
-                            'Your new password was mailed to you'
-                    else:
-                        return 'Internal Server Error'
-                else:
-                    return 'Wrong code'
-            else:
-                local.resp['type'] = 2
-
-                # Check if enough time has passed
-                if datetime.utcnow() - user.social_user.last_recover < timedelta(days=1):
-                    local.resp['message'] = 'You should already have received an email, if not, try tomorrow'
-                else:
-                    # Generate new code and mail it
-                    user.social_user.recover_code = self.gencode()
-                    user.social_user.lastLesson_recover = datetime.utcnow()
-                    local.session.commit()
-
-                    if self.send_mail(user.email, "Code for password reset",
-                                      """Username: %s
-Recovery code: %s""" % (user.username, user.social_user.recover_code)):
-                        local.resp['message'] = 'A code was sent, check your inbox'
-                    else:
-                        return 'Internal Server Error'
         else:
             return 'Bad request'
 
@@ -958,44 +749,6 @@ Recovery code: %s""" % (user.username, user.social_user.recover_code)):
                 def display(var):
                     return 'always' if len(var) > 0 else 'admin'
 
-#                
-#                task_menu = [{
-#                        "title": "All tasks",
-#                        "icon": "fa-list-ol",
-#                        "sref": "tasklist.page",
-#                        "params": {"pageNum": 1, "tag": None, "q": None}
-#                    }, {
-#                        "title": "Tasks by technique",
-#                        "icon": "fa-rocket",
-#                        "sref": "techniques"
-#                    }, {
-#                        "title": "Tasks by event",
-#                        "icon": "fa-trophy",
-#                        "sref": "events"
-#                    }, {
-#                        "title": "Lessons",
-#                        "icon": "fa-pencil",
-#                        "sref": "lessons",
-#                        "display": display(local.contest.lessons)
-#                    }, {
-#                        "title": "Material",
-#                        "icon": "fa-pencil",
-#                        "sref": "material",
-#                        "display": display(local.contest.materials)
-#                    }, {
-#                        "title": "Quizzes",
-#                        "icon": "fa-pencil",
-#                        "sref": "tests",
-#                        "display": display(local.contest.tests)
-#                    }]
-#
-#                menu = [{
-#                    "title": "Task & quiz archive",
-#                    "icon":  "fa-archive",
-#                    "entries": task_menu
-#                }]
-#
-
                 menu = [
                 {
                         "title": "Home",
@@ -1045,18 +798,6 @@ Recovery code: %s""" % (user.username, user.social_user.recover_code)):
                             "icon": "fa-comments",
                             "href": local.contest.social_contest.forum
                         }]})
-
-                '''
-                menu.append({
-                    "title": "Sign up",
-                    "icon": "fa-pencil",
-                    "entries": [{
-                        "title": "Sign up",
-                        "icon": "fa-pencil",
-                        "sref": "signup",
-                        "display": "unlogged"
-                    }]})
-                '''
 
             local.resp["menu"] = menu
         else:
@@ -1148,74 +889,6 @@ Recovery code: %s""" % (user.username, user.social_user.recover_code)):
                     local.resp['log'] = e.output
             if status != 0:
                 return 'Error %s in script' % status
-        else:
-            return 'Bad Request'
-
-    def material_handler(self):
-        if local.data['action'] == 'list':
-            query = local.session.query(Material)\
-                .filter(Material.contest_id == local.contest.id)\
-                .filter(Material.access_level >= local.access_level)\
-                .order_by(Material.id.desc())
-            local.resp['materials'] = [{
-                    'id': m.id,
-                    'title': m.title,
-                    'access_level': m.access_level,
-                    'text': m.text
-                } for m in query]
-        elif local.data['action'] == 'alter':
-            if local.access_level != 0:
-                return 'Unauthorized'
-            try:
-                material = local.session.query(Material)\
-                    .filter(Material.contest_id == local.contest.id)\
-                    .filter(Material.id == local.data['id']).first()
-                self.update_from_data(material, 'text', 'title', 'access_level')
-                local.session.commit()
-            except KeyError, ValueError:
-                return 'Bad Request'
-        # elif local.data['action'] == 'swap':
-        #     if local.access_level != 0:
-        #         return 'Unauthorized'
-        #     try:
-        #         material1 = local.session.query(Material)\
-        #             .filter(Material.contest_id == local.contest.id)\
-        #             .filter(Material.id == local.data['id1']).first()
-        #         material2 = local.session.query(Material)\
-        #             .filter(Material.contest_id == local.contest.id)\
-        #             .filter(Material.id == local.data['id2']).first()
-        #         material1.position, material2.position = material2.position, material1.position
-        #         local.session.commit()
-        #     except KeyError, ValueError:
-        #         return 'Bad Request'
-        elif local.data['action'] == 'delete':
-            if local.access_level != 0:
-                return 'Unauthorized'
-            try:
-                material = local.session.query(Material)\
-                    .filter(Material.contest_id == local.contest.id)\
-                    .filter(Material.id == local.data['id']).first()
-                local.session.delete(material)
-                local.session.commit()
-            except KeyError, ValueError:
-                return 'Bad Request'
-        elif local.data['action'] == 'new':
-            if local.access_level != 0:
-                return 'Unauthorized'
-
-            archive_data = self.decode_file(local.data['files']['mdfile'])
-
-            try:
-                material = Material()
-                material.contest = local.contest
-                material.access_level = 0
-                material.text = archive_data['body']
-                material.title = local.data['title']
-
-                local.session.add(material)
-                local.session.commit()
-            except ValueError:
-                return 'Bad Request'
         else:
             return 'Bad Request'
 
@@ -1315,8 +988,7 @@ Recovery code: %s""" % (user.username, user.social_user.recover_code)):
                 .filter(TaskScore.score == 100)\
                 .order_by(TaskScore.time)\
                 .slice(0, 10).all()
-            local.resp['best'] = [{'username': b.participation.user.username,
-                                   'time': b.time} for b in best]
+            local.resp['best'] = []
         elif local.data['action'] == 'bulk_download':
             tmp_path = tempfile.mkdtemp()
 

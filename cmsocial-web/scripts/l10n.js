@@ -279,7 +279,7 @@ angular.module('cmsocial')
     'Sign up': {
 //      it: 'Registrati'
     },
-    'Log in': {
+    'Login': {
 //      it: 'Entra'
     },
     'Log out': {
