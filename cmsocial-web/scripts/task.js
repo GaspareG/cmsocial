@@ -181,8 +181,8 @@ angular.module('cmsocial')
       "C++": ".cpp",
       "Java": ".java",
       "Pascal": ".pas",
-      "Python2": ".py",
-      "Python3": ".py"
+      "Python2": ".py2",
+      "Python3": ".py3"
     };
     var cmsLanguageMap = {
       "C11 / gcc": "C",

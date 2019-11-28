@@ -1349,7 +1349,7 @@ class APIHandler(object):
                 .filter(Submission.participation_id == local.participation.id)\
                 .order_by(desc(Submission.timestamp)).first()
             if lastsub is not None and \
-               make_datetime() - lastsub.timestamp < timedelta(seconds=20):
+               make_datetime() - lastsub.timestamp < timedelta(seconds=5):
                 return 'Too frequent submissions!'
 
             try:
