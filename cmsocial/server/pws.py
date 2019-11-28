@@ -564,7 +564,11 @@ class APIHandler(object):
     def sso_handler(self):
         if local.user is None:
             return 'Unauthorized'
+        if 'payload' not in local.data:
+            return 'Bad request'
         payload = local.data['payload']
+        if 'sig' not in local.data:
+            return 'Bad request'
         sig = local.data['sig']
         computed_sig = hmac.new(
             config.get("core", "secret").encode(),
