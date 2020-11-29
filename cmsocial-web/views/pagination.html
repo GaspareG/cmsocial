@@ -1,10 +1,15 @@
-<ul class="pagination">
-  <li ng-repeat="page in pages" ng-class="{active: page.active, disabled: page.disabled}">
-    <a ng-hide="page.disabled" ui-sref=".page({pageNum: page.number})">
+<ul class="pagination float-left">
+
+  <li class="page-item" ng-repeat="page in pages" ng-class="{active: page.active, disabled: page.disabled}">
+
+    <a class="page-link" ng-hide="page.disabled" ui-sref=".page({pageNum: page.number})">
       {{page.text}}
     </a>
-    <a ng-show="page.disabled">
+
+    <a class="page-link" ng-show="page.disabled">
       {{page.text}}
     </a>
+
   </li>
+
 </ul>

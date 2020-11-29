@@ -1,34 +1,60 @@
-<div class="container">
+<div class="container py-7">
 
-  <div class="row container">
-    <h1>Programming test</h1>
-    <h2>2 February Afternoon</h2>
-    <p><u>Given the current health situation, the information here written is provisional and may be subject to change</u></p>
-    <p>Phase 2, in the afternoon, is the <b>programming phase</b> and it will last for 3 hours. It is reserved for the participants who did the best job in the morning. The short list of students admitted to phase 2 will be announced in the early afternoon.</p>
-    <p>During the programming phase you will be asked to solve programming problems using the languages of your choice between C, C++, Python 3 and Java (for information about laboratories tools please refers to the university of your choice at <a href="https://cyberchallenge.it/venues">venues page</a>).</p>
-    <p>By combining the results of the two phases we will define the final ranking: the <b>top-20 students</b> for each site will be selected to <b>form the team</b> for the edition 2021 of CyberChallenge.IT.</p>
-    <p>You can familiarize yourself with the new training and admission platform with the <a href="https://training.cyberchallenge.it/#/tasks/1?tag=test">example problems</a>.</p>
-    <p>You can train with programming tests of previous editions (<a href="https://training.cyberchallenge.it/#/tasks/1?tag=2017">2017</a>, <a href="https://training.cyberchallenge.it/#/tasks/1?tag=2018">2018</a>, <a href="https://training.cyberchallenge.it/#/tasks/1?tag=2019">2019</a> and <a href="https://training.cyberchallenge.it/#/tasks/1?tag=2020">2020</a>).</p>
+  <div class="row justify-content-center">
+
+    <div class="col-12 col-lg-8">
+      <h1 class="text-red text-center">Programming test</h1>
+      <h3 class="text-blue text-center mt-1">2 February Afternoon</h3>
+
+      <p class="mt-3"><u>Given the current health situation, the information here written is provisional and may be subject to
+          change</u></p>
+
+      <p class="mt-3">Phase 2, in the afternoon, is the <b>programming phase</b> and it will last for 3 hours. It is reserved for the
+        participants who did the best job in the morning. The short list of students admitted to phase 2 will be
+        announced in the early afternoon.</p>
+
+      <p class="mt-3">During the programming phase you will be asked to solve programming problems using the languages of your choice
+        between C, C++, Python 3 and Java (for information about laboratories tools please refers to the university of
+        your choice at <a href="https://cyberchallenge.it/venues">venues page</a>).</p>
+
+      <p class="mt-3">By combining the results of the two phases we will define the final ranking: the <b>top-20 students</b> for
+        each site will be selected to <b>form the team</b> for the edition 2021 of CyberChallenge.IT.</p>
+
+      <p class="mt-3">You can familiarize yourself with the new training and admission platform with the <a
+          href="https://training.cyberchallenge.it/#/tasks/1?tag=test">example problems</a>.</p>
+
+      <p class="mt-3">You can train with programming tests of previous editions (<a
+          href="https://training.cyberchallenge.it/#/tasks/1?tag=2017">2017</a>, <a
+          href="https://training.cyberchallenge.it/#/tasks/1?tag=2018">2018</a>, <a
+          href="https://training.cyberchallenge.it/#/tasks/1?tag=2019">2019</a> and <a
+          href="https://training.cyberchallenge.it/#/tasks/1?tag=2020">2020</a>).</p>
+    </div>
   </div>
 
-  <h2>Train with the programming tests</h2>
+  <h3 class="text-center text-blue mt-5">Train with the programming tests</h3>
 
-  <div class="row container">
-    <pagination total-pages="pagination.total" current-page="pagination.current">
-    </pagination>
-    <span class="label alert-info big-tag" ng-if="search.tag_string">
-      <button type="button" class="close" aria-hidden="true" ng-click="search.tag=null;reloadTasks()">&times;</button>
-      <i class="fa fa-tag fa-lg"></i>
-      {{search.tag_string}}
-    </span>
-    <form class="search-by-tag form-inline pull-right" role="form" ng-submit="reloadTasks()">
-      <div class="form-group">
-        <input class="form-control" maxlength="50" autocomplete="off"
-            type="text" id="tag" name="tag" ng-model="search.q"
-            placeholder="{{'Search by name' | l10n}}"/>
-      </div>
-      <button type="submit" class="btn btn-info">{{'search' | l10n}}</button>
-    </form>
+  <div class="row justify-content-center mt-3">
+
+    <div class="col-12 col-lg-8 text-center text-lg-left">
+
+      <pagination total-pages="pagination.total" current-page="pagination.current">
+      </pagination>
+
+      <span class="label alert-info big-tag" ng-if="search.tag_string">
+        <button type="button" class="close" aria-hidden="true" ng-click="search.tag=null;reloadTasks()">&times;</button>
+        <i class="fa fa-tag fa-lg"></i>
+        {{search.tag_string}}
+      </span>
+
+      <form class="search-by-tag form-inline float-right" role="form" ng-submit="reloadTasks()">
+        <div class="form-group">
+          <input class="form-control" maxlength="50" autocomplete="off" type="text" id="tag" name="tag"
+            ng-model="search.q" placeholder="{{'Search by name' | l10n}}" />
+        </div>
+        <button type="submit" class="btn btn-secondary ml-3">{{'search' | l10n}}</button>
+      </form>
+    </div>
+
   </div>
 
   <div ui-view></div>

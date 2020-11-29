@@ -1,38 +1,52 @@
-<div class="container">
-  <legend>{{task.title}}</legend>
-  <ul class="nav nav-tabs">
-    <li ng-class="{active: isActiveTab(1)}">
-      <a ui-sref=".statement"><i class="fa fa-file-text fa-lg"></i> {{'Statement' | l10n}}</a>
+<div class="container py-7">
+
+  <h1 class="text-center text-red">{{task.title}}</h1>
+
+  <ul class="nav nav-tabs mt-3">
+
+    <li class="nav-item">
+      <a class="nav-link" ng-class="{active: isActiveTab(1)}" ui-sref=".statement"><i class="fa fa-file-text fa-lg"></i> {{'Statement' | l10n}}</a>
     </li>
-    <li ng-class="{active: isActiveTab(2)}" ng-show="task.attachments.length">
-      <a ui-sref=".attachments">
-        <span class="tab-badge-total badge pull-right">{{task.attachments.length}}</span>
+
+    <li class="nav-item" ng-show="task.attachments.length">
+      <a class="nav-link" ng-class="{active: isActiveTab(2)}" ui-sref=".attachments">
+        <span class="tab-badge-total badge float-right">{{task.attachments.length}}</span>
         <i class="fa fa-paperclip fa-lg"></i> {{'Attachments' | l10n}}
       </a>
     </li>
-    <li ng-class="{active: isActiveTab(3)}">
-      <a ui-sref=".stats"><i class="fa fa-bar-chart-o fa-lg"></i> {{'Stats' | l10n}}</a>
+
+    <!--
+    <li class="nav-item" ng-class="{active: isActiveTab(3)}">
+      <a class="nav-link" ui-sref=".stats"><i class="fa fa-bar-chart-o fa-lg"></i> {{'Stats' | l10n}}</a>
     </li>
-    <li ng-class="{active: isActiveTab(4)}" ng-show="isLogged()">
-      <a ui-sref=".submissions"><i class="fa fa-code fa-lg"></i> {{'Submissions' | l10n}}</a>
+    -->
+
+    <li class="nav-item" ng-show="isLogged()">
+      <a class="nav-link" ng-class="{active: isActiveTab(4)}" ui-sref=".submissions"><i class="fa fa-code fa-lg"></i> {{'Submissions' | l10n}}</a>
     </li>
-    <li class="my-popover pull-right" data-trigger="hover" data-placement="bottom" data-title="{{'Memory limit' | l10n}}" data-content="{{'Memory available for the execution of one testcase, measured in MiB.' | l10n}}" ng-show="task.memory_limit != undefined">
-      <a><i class="fa fa-stack-overflow fa-lg"></i> {{task.memory_limit}} {{'MiB' | l10n}}</a>
+
+    <li class="nav-item my-popover float-right" data-trigger="hover" data-placement="bottom" data-title="{{'Memory limit' | l10n}}" data-content="{{'Memory available for the execution of one testcase, measured in MiB.' | l10n}}" ng-show="task.memory_limit != undefined">
+      <a class="nav-link"><i class="fa fa-stack-overflow fa-lg"></i> {{task.memory_limit}} {{'MiB' | l10n}}</a>
     </li>
-    <li class="my-popover pull-right" data-trigger="hover" data-placement="bottom" data-title="{{'Time limit' | l10n}}" data-content="{{'Time available for the execution of one testcase, measured in seconds.' | l10n}}" ng-show="task.time_limit != undefined">
-      <a><i class="fa fa-clock-o fa-lg"></i> {{task.time_limit}} {{'sec' | l10n}}</a>
+
+    <li class="nav-item my-popover float-right" data-trigger="hover" data-placement="bottom" data-title="{{'Time limit' | l10n}}" data-content="{{'Time available for the execution of one testcase, measured in seconds.' | l10n}}" ng-show="task.time_limit != undefined">
+      <a class="nav-link"><i class="fa fa-clock-o fa-lg"></i> {{task.time_limit}} {{'sec' | l10n}}</a>
     </li>
-    <li class="pull-right" data-trigger="hover" data-placement="bottom" data-title="{{'Tags' | l10n}}"
+
+    <li class="nav-item float-right" data-trigger="hover" data-placement="bottom" data-title="{{'Tags' | l10n}}"
         data-content="{{'Tags are useful to classify tasks by a common characteristic or technique, such as: <i>greedy</i>, <i>graphs</i>, and so on.' | l10n}}">
-      <a data-toggle="modal" data-target="#tags_detail">
-        <span class="tab-badge-total badge pull-right">{{task.tags.length}}</span>
+      <a class="nav-link" data-toggle="modal" data-target="#tags_detail">
+        <span class="tab-badge-total badge float-right">{{task.tags.length}}</span>
         <i class="fa fa-tags fa-lg"></i> {{'Tags' | l10n}}
       </a>
     </li>
-    <li class="pull-right" ng-show="task.help_available">
-      <a ui-sref="help({ taskName: task.name })"><i class="fa fa-question fa-lg"></i> Aiuto</a>
+
+    <li class="nav-item float-right" ng-show="task.help_available">
+      <a class="nav-link" ui-sref="help({ taskName: task.name })"><i class="fa fa-question fa-lg"></i> Aiuto</a>
     </li>
+
   </ul>
+
   <div class="modal fade" id="tags_detail" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

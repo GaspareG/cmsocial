@@ -1,92 +1,212 @@
-<div class="navbar navbar-inverse navbar-fixed-top">
-  <div>
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="https://cyberchallenge.it/"><img src="https://cyberchallenge.it/assets/icons/Logo.svg" class="svg-white" height="52"></a>
-    </div>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-blue text-white shadow p-0 px-lg-3 py-lg-2">
 
-    <div class="navbar-collapse collapse" ng-controller="SignCtrl">
-      <ul class="nav navbar-nav">
-        <li ng-repeat="category in cm.getMenu(me.getUser().access_level)" ng-class="{dropdown: category.entries.length > 1}" ng-if="category.entries.length > 0">
-          <a ng-if="category.entries.length == 1" ng-href="{{rt(category.entries[0])}}"><i class="fa {{category.entries[0].icon}} fa-lg"></i> {{category.entries[0].title | l10n}}</a>
-          <a class="dropdown-toggle" data-toggle="dropdown" ng-if="category.entries.length > 1">
-            <i class="fa {{category.icon}} fa-lg"></i> {{category.title | l10n}} <b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu" ng-if="category.entries.length > 1">
-            <li ng-repeat="entry in category.entries">
-                <a ng-href="{{rt(entry)}}">
-                    <i class="fa {{entry.icon}} fa-fw"></i> {{entry.title | l10n}}
-                </a>
-            </li>
-          </ul>
-        </li>
-        <li ng-if="me.isLogged() && !cm.hasParticipation()">
-          <p class="navbar-btn">
-            <a ng-click="participate()" class="btn btn-success"><i class="fa fa-sign-in"></i>{{'Enter the contest' | l10n}}</a>
-          </p>
-        </li>
-      </ul>
-
-      <ul class="nav navbar-nav navbar-right">
-        <li ng-if="!me.isLogged()">
-          <a href="http://cyberchallenge.it/register"><i class="fa fa-user fa-lg"></i> {{'Sign up' | l10n}}</a>
-        </li>
-        <li ng-if="!me.isLogged()" class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sign-in fa-lg"></i> {{'Login' | l10n}} <b class="caret"></b></a>
-          <div class="dropdown-menu">
-            <form class="signin-form" role="form" name="signinform" ng-submit="signin()">
-              <div class="form-group">
-                <label class="sr-only" for="email">{{'Email' | l10n}}</label>
-                <input class="form-control" type="text" id="email" name="email" ng-model="user.email" placeholder="Email" />
-              </div>
-              <div class="form-group">
-                <label class="sr-only" for="password">{{'Password' | l10n}}</label>
-                <input class="form-control" type="password" id="password" name="password" ng-model="user.password" placeholder="Password" />
-              </div>
-              <div class="row vertical-center">
-                <div class="col-xs-8">
-                  <input type="checkbox" id="keep_signed" name="keep_signed" checked="checked" />
-                  <label for="keep_signed">{{'Stay signed in' | l10n}}</label>
-                </div>
-                <div class="col-xs-4">
-                  <button type="submit" class="btn btn-success pull-right"><i class="fa fa-sign-in"></i> {{'Login' | l10n}}</button>
-                </div>
-              </div>
-              <div class="form-group" style="margin: 6px 0px 0px 0px" ng-if="cm.getContest().mail_enabled">
-                <a data-toggle="dropdown" ui-sref="forgot-account">{{'Forgot account?' | l10n}}</a>
-              </div>
-            </form>
-          </div>
-        </li>
-
-        <li ng-if="me.isLogged()" class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-user fa-lg"></i>
-            <i>{{me.getUser().first_name}} {{me.getUser().last_name}}</i>
-            <b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a ui-sref="user.profile({userId: me.getUser().id})">
-                <i class="fa fa-list-ol fa-fw"></i>
-                {{'My user profile' | l10n}}
-              </a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a ng-click="signout()">
-                <i class="fa fa-sign-out fa-fw"></i>
-                {{'Log out' | l10n}}
-              </a>
-            </li>
-          </ul>
-        </li>
-
-      </ul>
-    </div><!--/.navbar-collapse -->
+  <!-- CyberChallenge.IT logo -->
+  <div class="d-flex w-50 order px-3 py-2 p-lg-0">
+    <a class="navbar-brand" href="https://cyberchallenge.it/"><img src="https://cyberchallenge.it/assets/icons/Logo.svg"
+        class="d-inline-block align-top svg-white" height="52" /></a>
   </div>
-</div>
+
+  <!-- Navbar toggler -->
+  <button class="navbar-toggler border-0 px-3 py-2 p-lg-0" type="button" data-toggle="collapse"
+    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+    aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- menu -->
+  <div class="collapse navbar-collapse justify-content-center bg-blue order-2" id="navbarSupportedContent">
+
+    <ul class="navbar-nav navbar-training">
+
+      <li class="nav-item active dropdown position-static overflow-auto mh-100 text-center"
+        ng-repeat="category in cm.getMenu(me.getUser().access_level)" ng-class="{dropdown: category.entries.length > 1}"
+        ng-if="category.entries.length > 0">
+
+        <a class="nav-link" ng-if="category.entries.length == 1" ng-href="{{rt(category.entries[0])}}">
+          <!--<i class="fa {{category.entries[0].icon}} fa-lg"></i>--> {{category.entries[0].title | l10n}}</a>
+
+        <a class="dropdown-toggle nav-link" data-toggle="dropdown" ng-if="category.entries.length > 1">
+          <!--<i class="fa {{category.icon}} fa-lg"></i>--> {{category.title | l10n}} <b class="caret"></b>
+        </a>
+
+        <ul class="dropdown-menu" ng-if="category.entries.length > 1">
+          <li ng-repeat="entry in category.entries">
+            <a ng-href="{{rt(entry)}}" class="nav-link">
+              <i class="fa {{entry.icon}} fa-fw"></i> {{entry.title | l10n}}
+            </a>
+          </li>
+        </ul>
+
+      </li>
+
+      <li class="nav-item active dropdown position-static overflow-auto mh-100"
+        ng-if="me.isLogged() && !cm.hasParticipation()">
+        <p class="navbar-btn">
+          <a ng-click="participate()" class="btn btn-success"><i
+              class="fa fa-sign-in"></i>{{'Enter the contest' | l10n}}</a>
+        </p>
+
+      </li>
+
+      <!-- Mobile && !Logged -->
+      <li ng-if="!me.isLogged()" class="nav-item active d-block d-lg-none text-center py-3" ng-controller="SignCtrl">
+
+        <form class="signin-form form-inline mr-3 w-100 text-center" role="form" name="signinform" ng-submit="signin()">
+  
+          <div class="form-group text-center m-auto">
+            <input class="form-control w-40" type="text" id="email" name="email" ng-model="user.email" placeholder="Email" />
+  
+            <input class="form-control ml-3 w-40" type="password" id="password" name="password" ng-model="user.password"
+              placeholder="Password" />
+  
+            <button type="submit" class="btn btn-success ml-3"><i class="fa fa-sign-in"></i></button>
+  
+          </div>
+  
+          <input type="hidden" id="keep_signed" name="keep_signed" checked="checked" />
+  
+        </form>
+  
+      </li>
+  
+
+      <!-- Mobile && Logged -->
+      <li class="d-block d-lg-none text-center py-3 nav-item active" ng-if="me.isLogged()" ng-controller="SignCtrl">
+        
+        <a class="btn btn-primary" ui-sref="user.profile({userId: me.getUser().id})">
+          <i class="fa fa-user fa-lg"></i>
+          Profile
+          <b class="caret"></b>
+        </a>
+
+        <button class="btn btn-primary ml-3" ng-click="signout()">
+          <i class="fa fa-sign-out fa-fw"></i>
+        </button>
+
+      </li>
+
+    </ul>
+
+  </div>
+
+
+  <!-- Right menu -->
+  <ul class="navbar-nav w-50 order-1 order-md-last justify-content-end align-items-center d-none d-lg-flex"
+    ng-controller="SignCtrl">
+
+    <li ng-if="!me.isLogged()" class="nav-item dropdown">
+
+      <form class="signin-form form-inline mr-3" role="form" name="signinform" ng-submit="signin()">
+
+        <div class="form-group">
+          <input class="form-control" type="text" id="email" name="email" ng-model="user.email" placeholder="Email" />
+
+          <input class="form-control ml-3" type="password" id="password" name="password" ng-model="user.password"
+            placeholder="Password" />
+
+          <button type="submit" class="btn btn-success ml-3"><i class="fa fa-sign-in"></i></button>
+
+        </div>
+
+        <input type="hidden" id="keep_signed" name="keep_signed" checked="checked" />
+
+      </form>
+
+    </li>
+
+    <li ng-if="me.isLogged()">
+      <a class="btn btn-primary" ui-sref="user.profile({userId: me.getUser().id})">
+        <i class="fa fa-user fa-lg"></i>
+        Profile
+        <!--
+        <i>{{me.getUser().first_name}} {{me.getUser().last_name}}</i>
+        -->
+        <b class="caret"></b>
+      </a>
+    </li>
+
+    <li ng-if="me.isLogged()">
+      <button class="btn btn-primary ml-3" ng-click="signout()">
+        <i class="fa fa-sign-out fa-fw"></i>
+        <!--{{'Log out' | l10n}}-->
+      </button>
+    </li>
+  </ul>
+
+  <!--
+  <ul class="navbar-nav w-50 order-1 order-md-last justify-content-end align-items-center d-none d-lg-flex">
+
+    <li ng-if="!me.isLogged()" class="nav-item">
+      <a href="http://cyberchallenge.it/register" class="nav-link"><i class="fa fa-user fa-lg"></i>
+        {{'Sign up' | l10n}}</a>
+    </li>
+    <li ng-if="!me.isLogged()" class="nav-item dropdown">
+
+      <a class="dropdown-toggle nav-link" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        <i class="fa fa-sign-in fa-lg"></i> {{'Login' | l10n}} <b class="caret"></b>
+      </a>
+
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+        <form class="signin-form" role="form" name="signinform" ng-submit="signin()">
+          <div class="form-group">
+            <label class="sr-only" for="email">{{'Email' | l10n}}</label>
+            <input class="form-control" type="text" id="email" name="email" ng-model="user.email" placeholder="Email" />
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="password">{{'Password' | l10n}}</label>
+            <input class="form-control" type="password" id="password" name="password" ng-model="user.password"
+              placeholder="Password" />
+          </div>
+          <div class="row vertical-center">
+            <div class="col-xs-8">
+              <input type="checkbox" id="keep_signed" name="keep_signed" checked="checked" />
+              <label for="keep_signed">{{'Stay signed in' | l10n}}</label>
+            </div>
+            <div class="col-xs-4">
+              <button type="submit" class="btn btn-success pull-right"><i class="fa fa-sign-in"></i>
+                {{'Login' | l10n}}</button>
+            </div>
+          </div>
+          <div class="form-group" style="margin: 6px 0px 0px 0px" ng-if="cm.getContest().mail_enabled">
+            <a data-toggle="dropdown" ui-sref="forgot-account">{{'Forgot account?' | l10n}}</a>
+          </div>
+        </form>
+
+      </div>
+
+    </li>
+
+    <li ng-if="me.isLogged()" class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-user fa-lg"></i>
+        <i>{{me.getUser().first_name}} {{me.getUser().last_name}}</i>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a ui-sref="user.profile({userId: me.getUser().id})">
+            <i class="fa fa-list-ol fa-fw"></i>
+            {{'My user profile' | l10n}}
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a ng-click="signout()">
+            <i class="fa fa-sign-out fa-fw"></i>
+            {{'Log out' | l10n}}
+          </a>
+        </li>
+      </ul>
+    </li>
+
+  </ul>
+  -->
+
+
+  </div>
+  <!--/.navbar-collapse -->
+
+
+</nav>

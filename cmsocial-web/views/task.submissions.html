@@ -1,6 +1,6 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">{{'Submit a solution' | l10n}}</h3>
+    <h3 class="panel-title text-center py-3">{{'Submit a solution' | l10n}}</h3>
   </div>
   <div class="panel-body">
     <form class="col-sm-12" ng-submit="loadAce()" id="aceform" ng-if="task.submission_format.length == 1">
@@ -9,10 +9,19 @@
           <button type="button" class="btn btn-warning" ng-click="resetAce()">
             <i class="fa fa-trash"></i> {{'Reset' | l10n}}
           </button>
+
+          <label type="button" class="btn btn-warning">
+            <input type="file" custom-on-change="loadFile" style="display:none">
+            <i class="fa fa-folder-open"></i> {{'Load file' | l10n}}
+          </label>
+
+          <!--
           <label class="btn btn-warning">
             <input type="file" custom-on-change="loadFile" style="display:none">
             <i class="fa fa-folder-open"></i> {{'Load file' | l10n}}
           </label>
+        -->
+
         </div>
 
         <span class="btn-separator"></span>
@@ -74,7 +83,7 @@
 
   </div>
   <div class="panel-heading">
-    <h3 class="panel-title">{{'Previous submissions' | l10n}}</h3>
+    <h3 class="panel-title text-center py-3">{{'Previous submissions' | l10n}}</h3>
   </div>
   <table class="submissions table table-bordered table-striped">
     <tr ng-show="areThereSubs(taskName)">

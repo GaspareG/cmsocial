@@ -773,19 +773,19 @@ class APIHandler(object):
                        }]
                 },
                 {
-                        "title": "Logic quizzes",
+                        "title": "Quizzes",
                         "icon": "fa-calculator",
                         "entries": [{
-                          "title": "Logic quizzes",
+                          "title": "Quizzes",
                           "icon": "fa-calculator",
                           "sref": "logic-quiz",
                        }]
                 },
                 {
-                        "title": "Programming tests",
+                        "title": "Tests",
                         "icon": "fa-code",
                         "entries": [{
-                          "title": "Programming tests",
+                          "title": "Tests",
                           "icon": "fa-code",
                           "sref": "tasklist.page",
                           "params": {"pageNum": 1, "tag": None, "q": None}
@@ -983,16 +983,16 @@ class APIHandler(object):
                 .filter(SocialTask.access_level >= local.access_level).first()
             if t is None:
                 return 'Not found'
-            local.resp['nsubs'] = t.social_task.nsubs
-            local.resp['nusers'] = t.social_task.nusers
-            local.resp['nsubscorrect'] = t.social_task.nsubscorrect
-            local.resp['nuserscorrect'] = t.social_task.nuserscorrect
-            best = local.session.query(TaskScore)\
-                .filter(TaskScore.task == t.social_task)\
-                .filter(TaskScore.score == 100)\
-                .order_by(TaskScore.time)\
-                .slice(0, 10).all()
-            local.resp['best'] = []
+            # local.resp['nsubs'] = t.social_task.nsubs
+            # local.resp['nusers'] = t.social_task.nusers
+            # local.resp['nsubscorrect'] = t.social_task.nsubscorrect
+            # local.resp['nuserscorrect'] = t.social_task.nuserscorrect
+            # best = local.session.query(TaskScore)\
+            #     .filter(TaskScore.task == t.social_task)\
+            #     .filter(TaskScore.score == 100)\
+            #     .order_by(TaskScore.time)\
+            #     .slice(0, 10).all()
+            # local.resp['best'] = []
         #elif local.data['action'] == 'bulk_download':
         #    tmp_path = tempfile.mkdtemp()
         #    for f in local.data['attachments']:
